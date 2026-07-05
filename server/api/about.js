@@ -2,17 +2,16 @@ const db = require('../db/index');
 const logger = require('../utils/logger');
 
 exports.getAbout = (req, res) => {
-    const sql = 'SELECT * FROM about_config LIMIT 1';
-    db.query(sql, (err, result) => {
+    const sql = 'SELECT * FROM about LIMIT 1';
+    db.get(sql, (err, data) => {
         if (err) {
             logger.error('获取关于信息失败', { error: err.message, sql: sql });
             return res.send({ status: 400, message: '获取信息失败' });
         }
-        if (result.length === 0) {
+        if (!data) {
             logger.warn('关于信息不存在');
             return res.send({ status: 404, message: '信息不存在' });
         }
-        const data = result[0];
         const birthDate = new Date(data.birth_date);
         const today = new Date();
         const diffTime = Math.abs(today - birthDate);
@@ -33,18 +32,26 @@ exports.getAbout = (req, res) => {
 };
 
 exports.updateAbout = (req, res) => {
-    const { baby_name, birth_date, birth_weight, birth_height, nickname_meaning, site_description, welcome_message, footer_message } = req.body;
-    const sql = 'UPDATE about_config SET baby_name=?, birth_date=?, birth_weight=?, birth_height=?, nickname_meaning=?, site_description=?, welcome_message=?, footer_message=?, updated_at=CURRENT_TIMESTAMP WHERE id=1';
-    db.query(sql, [baby_name, birth_date, birth_weight, birth_height, nickname_meaning, site_description, welcome_message, footer_message], (err, result) => {
+    const { baby_name, birth_date, footer_message } = req.body;
+    const sql = 'UPDATE about SET baby_name=?, birth_date=?, footer_message=?, updated_at=CURRENT_TIMESTAMP WHERE id=1';
+    db.run(sql, [baby_name, birth_date, footer_message], function(err) {
         if (err) {
             logger.error('更新关于信息失败', { error: err.message, sql: sql, data: req.body });
             return res.send({ status: 400, message: '更新失败' });
         }
-        if (result.affectedRows === 0) {
-            logger.warn('更新关于信息失败: 记录不存在');
-            return res.send({ status: 404, message: '记录不存在' });
+        if (this.changes === 0) {
+            const insertSql = 'INSERT INTO about (baby_name, birth_date, footer_message) VALUES (?, ?, ?)';
+            db.run(insertSql, [baby_name, birth_date, footer_message], function(err) {
+                if (err) {
+                    logger.error('插入关于信息失败', { error: err.message, sql: insertSql, data: req.body });
+                    return res.send({ status: 400, message: '更新失败' });
+                }
+                logger.info(`插入关于信息成功: baby_name=${baby_name}`);
+                res.send({ status: 200, message: '更新成功' });
+            });
+        } else {
+            logger.info(`更新关于信息成功: baby_name=${baby_name}`);
+            res.send({ status: 200, message: '更新成功' });
         }
-        logger.info(`更新关于信息成功: baby_name=${baby_name}`);
-        res.send({ status: 200, message: '更新成功' });
     });
 };

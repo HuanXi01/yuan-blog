@@ -6,14 +6,19 @@ const router = require('./router');
 const multer = require('multer');
 const logger = require('./utils/logger');
 const { handleVideoUpload } = require('./utils/videoConverter');
+const { uploadFile } = require('./utils/cloudinary');
+const db = require('./db/index');
 
 logger.info('服务器启动中...');
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cors());
-app.use('/pImages', express.static(path.join(__dirname, '../public/pImages')));
-app.use('/uploads', express.static(path.join(__dirname, '../public/uploads')));
+
+if (process.env.NODE_ENV !== 'production') {
+  app.use('/pImages', express.static(path.join(__dirname, '../public/pImages')));
+  app.use('/uploads', express.static(path.join(__dirname, '../public/uploads')));
+}
 
 app.use((req, res, next) => {
     logger.info(`${req.method} ${req.url}`, {
@@ -53,12 +58,20 @@ app.post('/api/upload', upload.single('file'), async (req, res) => {
     logger.info(`开始处理上传文件: ${req.file.originalname}, 大小: ${req.file.size} bytes, 类型: ${req.file.mimetype}`);
     
     try {
-        const filePath = await handleVideoUpload(req.file);
-        logger.info(`文件上传成功: ${filePath}`);
+        let filePath = await handleVideoUpload(req.file);
+        
+        if (process.env.CLOUDINARY_CLOUD_NAME) {
+            filePath = await uploadFile(filePath);
+            logger.info(`文件上传至 Cloudinary: ${filePath}`);
+        }
+        
         res.send({ status: 200, message: '上传成功', data: { url: filePath } });
     } catch (error) {
         logger.error(`文件上传处理失败: ${error.message}`);
-        res.send({ status: 200, message: '上传成功（使用原文件）', data: { url: `/uploads/${req.file.filename}` } });
+        const fallbackUrl = process.env.NODE_ENV === 'production' 
+            ? `/uploads/${req.file.filename}` 
+            : `/uploads/${req.file.filename}`;
+        res.send({ status: 200, message: '上传成功（使用原文件）', data: { url: fallbackUrl } });
     }
 });
 
@@ -70,7 +83,12 @@ app.post('/api/upload/multiple', upload.array('files', 10), async (req, res) => 
     
     try {
         const files = await Promise.all(req.files.map(async file => {
-            const url = await handleVideoUpload(file);
+            let url = await handleVideoUpload(file);
+            
+            if (process.env.CLOUDINARY_CLOUD_NAME) {
+                url = await uploadFile(url);
+            }
+            
             return {
                 url: url,
                 name: file.originalname,
@@ -103,6 +121,9 @@ app.post('/api/log', (req, res) => {
 app.use(router);
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    logger.info(`服务器启动成功，后端接口地址 http://localhost:${PORT}`);
+
+db.waitForDb(() => {
+    app.listen(PORT, () => {
+        logger.info(`服务器启动成功，后端接口地址 http://localhost:${PORT}`);
+    });
 });
