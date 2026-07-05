@@ -32,16 +32,16 @@ exports.getAbout = (req, res) => {
 };
 
 exports.updateAbout = (req, res) => {
-    const { baby_name, birth_date, footer_message } = req.body;
-    const sql = 'UPDATE about SET baby_name=?, birth_date=?, footer_message=?, updated_at=CURRENT_TIMESTAMP WHERE id=1';
-    db.run(sql, [baby_name, birth_date, footer_message], function(err) {
+    const { baby_name, birth_date, footer_message, avatar, birth_weight, birth_height, nickname_meaning } = req.body;
+    const sql = 'UPDATE about SET baby_name=?, birth_date=?, footer_message=?, avatar=?, birth_weight=?, birth_height=?, nickname_meaning=?, updated_at=CURRENT_TIMESTAMP WHERE id=1';
+    db.run(sql, [baby_name, birth_date, footer_message, avatar, birth_weight, birth_height, nickname_meaning], function(err) {
         if (err) {
             logger.error('更新关于信息失败', { error: err.message, sql: sql, data: req.body });
             return res.send({ status: 400, message: '更新失败' });
         }
         if (this.changes === 0) {
-            const insertSql = 'INSERT INTO about (baby_name, birth_date, footer_message) VALUES (?, ?, ?)';
-            db.run(insertSql, [baby_name, birth_date, footer_message], function(err) {
+            const insertSql = 'INSERT INTO about (baby_name, birth_date, footer_message, avatar, birth_weight, birth_height, nickname_meaning) VALUES (?, ?, ?, ?, ?, ?, ?)';
+            db.run(insertSql, [baby_name, birth_date, footer_message, avatar, birth_weight, birth_height, nickname_meaning], function(err) {
                 if (err) {
                     logger.error('插入关于信息失败', { error: err.message, sql: insertSql, data: req.body });
                     return res.send({ status: 400, message: '更新失败' });

@@ -1,5 +1,6 @@
 let db = require('../db/index')
 let md5 = require('md5')
+const bcrypt = require('bcryptjs')
 const logger = require('../utils/logger')
 
 exports.login = (req, res) => {
@@ -18,7 +19,13 @@ exports.login = (req, res) => {
             logger.warn('登录失败: 用户名不存在', { username: username })
             return res.json({ status: 401, message: '用户名不存在' })
         }
-        if (user.password !== md5(password)) {
+        let passwordMatch = false
+        if (user.password.length === 32) {
+            passwordMatch = user.password === md5(password)
+        } else {
+            passwordMatch = bcrypt.compareSync(password, user.password)
+        }
+        if (!passwordMatch) {
             logger.warn('登录失败: 密码错误', { username: username })
             return res.json({ status: 401, message: '密码错误' })
         }

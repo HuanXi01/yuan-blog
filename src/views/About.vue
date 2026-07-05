@@ -11,7 +11,7 @@
     <div class="info-card card">
       <div class="card-header">
         <div class="baby-photo">
-          <img src="/pImages/微信图片_20260704191311_311_92.jpg" alt="宇安">
+          <img :src="aboutInfo.avatar || '/pImages/微信图片_20260704191311_311_92.jpg'" :alt="aboutInfo.baby_name || '宇安'">
         </div>
         <div class="baby-name">{{ aboutInfo.baby_name }}</div>
       </div>

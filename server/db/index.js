@@ -73,6 +73,10 @@ const initDatabase = () => {
             birth_date TEXT,
             days_born INTEGER,
             footer_message TEXT,
+            avatar TEXT,
+            birth_weight REAL,
+            birth_height REAL,
+            nickname_meaning TEXT,
             created_at TEXT DEFAULT CURRENT_TIMESTAMP,
             updated_at TEXT DEFAULT CURRENT_TIMESTAMP
         )`,
@@ -166,8 +170,8 @@ const initDefaultData = () => {
         
         const aboutResult = db.exec('SELECT COUNT(*) as count FROM about');
         if (aboutResult.length > 0 && aboutResult[0].values.length > 0 && aboutResult[0].values[0][0] === 0) {
-            db.run('INSERT INTO about (baby_name, birth_date, days_born, footer_message) VALUES (?, ?, ?, ?)', 
-                ['宇安', '2026-04-27', 0, '慢慢长大，岁岁平安']);
+            db.run('INSERT INTO about (baby_name, birth_date, days_born, footer_message, avatar, birth_weight, birth_height, nickname_meaning) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', 
+                ['宇安', '2026-04-27', 0, '慢慢长大，岁岁平安', 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=cute%20baby%20portrait%20soft%20pastel%20colors%20warm%20lighting&image_size=square', 3.5, 50, '宇是宇宙的宇，安是平安的安，希望你胸怀宇宙，一生平安']);
             db.save();
             console.log('默认关于信息已创建');
         }

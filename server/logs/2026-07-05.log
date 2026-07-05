@@ -13,3 +13,11 @@
 [2026/07/05 13:01:17] [INFO] GET /api/about | {"ip":"::ffff:127.0.0.1","params":{},"query":{},"body":"{}"}
 [2026/07/05 13:01:29] [INFO] GET /api/about | {"ip":"::1","params":{},"query":{},"body":"{}"}
 [2026/07/05 13:01:29] [INFO] 获取关于信息成功: baby_name=宇安
+[2026/07/05 16:09:06] [INFO] 服务器启动中...
+[2026/07/05 16:09:06] [INFO] 服务器启动成功，后端接口地址 http://localhost:3000
+[2026/07/05 16:09:20] [INFO] POST /api/login | {"ip":"::1","params":{},"query":{},"body":"{\"username\":\"admin\",\"password\":\"1234\"}"}
+[2026/07/05 16:09:20] [INFO] 登录成功: admin, role=admin
+[2026/07/05 16:12:23] [INFO] 服务器启动中...
+[2026/07/05 16:12:23] [INFO] 服务器启动成功，后端接口地址 http://localhost:3000
+[2026/07/05 16:12:38] [INFO] GET /api/about | {"ip":"::1","params":{},"query":{},"body":"{}"}
+[2026/07/05 16:12:38] [INFO] 获取关于信息成功: baby_name=宇安
