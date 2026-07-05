@@ -21,3 +21,25 @@
 [2026/07/05 16:12:23] [INFO] 服务器启动成功，后端接口地址 http://localhost:3000
 [2026/07/05 16:12:38] [INFO] GET /api/about | {"ip":"::1","params":{},"query":{},"body":"{}"}
 [2026/07/05 16:12:38] [INFO] 获取关于信息成功: baby_name=宇安
+[2026/07/05 16:37:17] [INFO] 服务器启动中...
+[2026/07/05 16:37:17] [INFO] 服务器启动成功，后端接口地址 http://localhost:3000
+[2026/07/05 16:37:27] [INFO] GET /api/timeline/latest?limit=4 | {"ip":"::1","params":{},"query":{"limit":"4"},"body":"{}"}
+[2026/07/05 16:37:27] [INFO] 获取最新时光轴记录成功: 0条
+[2026/07/05 16:37:35] [INFO] GET /api/milestones/unlocked | {"ip":"::1","params":{},"query":{},"body":"{}"}
+[2026/07/05 16:37:35] [INFO] 获取已解锁里程碑成功: 0条
+[2026/07/05 16:38:42] [INFO] 服务器启动中...
+[2026/07/05 16:38:42] [INFO] 服务器启动成功，后端接口地址 http://localhost:3000
+[2026/07/05 16:38:51] [INFO] GET /api/timeline/latest?limit=4 | {"ip":"::1","params":{},"query":{"limit":"4"},"body":"{}"}
+[2026/07/05 16:38:51] [INFO] 获取最新时光轴记录成功: 0条
+[2026/07/05 16:39:02] [INFO] GET /api/milestones/unlocked | {"ip":"::1","params":{},"query":{},"body":"{}"}
+[2026/07/05 16:39:02] [INFO] 获取已解锁里程碑成功: 0条
+[2026/07/05 16:40:20] [INFO] 服务器启动中...
+[2026/07/05 16:40:21] [INFO] 服务器启动成功，后端接口地址 http://localhost:3000
+[2026/07/05 16:40:30] [INFO] 获取最新时光轴记录成功: 4条
+[2026/07/05 16:40:30] [INFO] GET /api/timeline/latest?limit=4 | {"ip":"::1","params":{},"query":{"limit":"4"},"body":"{}"}
+[2026/07/05 16:40:40] [INFO] GET /api/milestones/unlocked | {"ip":"::1","params":{},"query":{},"body":"{}"}
+[2026/07/05 16:40:40] [INFO] 获取已解锁里程碑成功: 2条
+[2026/07/05 16:41:51] [INFO] 服务器启动中...
+[2026/07/05 16:41:51] [INFO] 服务器启动成功，后端接口地址 http://localhost:3000
+[2026/07/05 16:42:00] [INFO] GET /api/about | {"ip":"::1","params":{},"query":{},"body":"{}"}
+[2026/07/05 16:42:00] [INFO] 获取关于信息成功: baby_name=宇安

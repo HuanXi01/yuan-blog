@@ -19,8 +19,8 @@ exports.getAllRecords = (req, res) => {
     
     if (month) {
         const [year, m] = month.split('-');
-        sql += ' AND YEAR(record_date) = ? AND MONTH(record_date) = ?';
-        countSql += ' AND YEAR(record_date) = ? AND MONTH(record_date) = ?';
+        sql += ' AND strftime(\'%Y\', record_date) = ? AND strftime(\'%m\', record_date) = ?';
+        countSql += ' AND strftime(\'%Y\', record_date) = ? AND strftime(\'%m\', record_date) = ?';
         params.push(year, m, year, m);
     }
     
@@ -128,7 +128,7 @@ exports.getLatestRecords = (req, res) => {
 };
 
 exports.getMonthList = (req, res) => {
-    const sql = 'SELECT DISTINCT DATE_FORMAT(record_date, "%Y-%m") as month FROM timeline_records ORDER BY month DESC';
+    const sql = 'SELECT DISTINCT strftime("%Y-%m", record_date) as month FROM timeline_records ORDER BY month DESC';
     db.query(sql, (err, result) => {
         if (err) {
             logger.error('获取时光轴月份列表失败', { error: err.message, sql: sql });
@@ -141,7 +141,7 @@ exports.getMonthList = (req, res) => {
 
 exports.getRecordByDate = (req, res) => {
     const { date } = req.query;
-    const sql = 'SELECT * FROM timeline_records WHERE DATE(record_date) = ?';
+    const sql = 'SELECT * FROM timeline_records WHERE strftime("%Y-%m-%d", record_date) = ?';
     db.query(sql, [date], (err, result) => {
         if (err) {
             logger.error('按日期获取时光轴记录失败', { error: err.message, sql: sql, date: date });
